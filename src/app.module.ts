@@ -7,7 +7,8 @@ import InvoicingRepository from './Invoicing/InvoicingRepository';
 import InvoicingService from './Invoicing/InvoicingService';
 import { DatabaseService } from './Database/DatabaseService';
 import InvoicingController from './Invoicing/InvoicingController';
-import SendPaymentToManagement from './Invoicing/SendPaymentToManagement';
+import NotifyActivePlansProxy from './Proxies/NotifyActivePlansProxy';
+import SendPaymentToManagementProxy from './Proxies/SendPaymentToManagementProxy';
 
 const useCases = [
   RegisterPaymentUseCase,
@@ -27,9 +28,16 @@ const repositories = [
       {
         name: 'PAYMENT_CREATED',
         transport: Transport.TCP,
-        options: { host: 'localhost', port: 3001 },
+        options: { host: 'localhost', port: 3001 }, 
       },
     ]),
+    ClientsModule.register([
+      {
+        name: 'PAYMENT_REGISTERED',
+        transport: Transport.TCP,
+        options: { host: 'localhost', port: 4001 },
+      }
+    ])
   ],
   controllers: [AppController, InvoicingController],
   providers: [
@@ -38,7 +46,8 @@ const repositories = [
     ...services,
     ...repositories,
     DatabaseService,
-    SendPaymentToManagement
+    SendPaymentToManagementProxy,
+    NotifyActivePlansProxy
   ],
 })
 export class AppModule {}

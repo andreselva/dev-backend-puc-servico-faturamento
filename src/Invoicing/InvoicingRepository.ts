@@ -10,7 +10,7 @@ export default class InvoicingRepository {
 
     async registerPayment(payment: any): Promise<any> {
         const query = `INSERT INTO pagamentos (codPlano, valorPago, dataPagamento) VALUES (?, ?, ?)`;
-        const params = [payment.codPlano, payment.valorPago, payment.dataPagamento];
+        const params = [payment.codAssinatura, payment.valorPago, payment.dataPagamento];
         const result = await this.databaseService.insert(query, params);
 
         if (result > 0) {
